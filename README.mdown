@@ -81,7 +81,7 @@ for order in orders:
 	print order.modified
 ```
 
-API Documentation
+For all API documentation, [please read here](https://www.gingerpayments.com/api)
 
 Licence
 ----
