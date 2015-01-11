@@ -1,0 +1,88 @@
+Ginger Payments API Wrapper
+========
+
+Ginger is a 2014-founded technology-driven company that provides a platform, which enables businesses to process payments online. It’s Ginger’s believe that its state of the art technology helps to streamline processes, improves the customer experience and ultimately helps to increase revenue. Ginger strives for clear technology and uncomplicated services. 
+Further information, see [Ginger Payments](http://www.gingerpayments.com/)
+
+The company operates from an API-first standpoint. This code is a library to make it easy to access the API of Ginger Payments and all of its functionality. 
+
+Basic Usage 
+========
+
+Python requirements
+* requests>=2.4.1
+
+This API wrapper follows the natural URL of the REST API by Ginger Payments.
+
+First things first, will need an API key. If you don't have one, [sign up here](https://www.gingerpayments.com/signon).
+
+**Create order**
+```python
+# initialise the API
+gapi = GingerAPI('<API_KEY>')
+
+# create order
+order = gapi.orders.create({'merchant_order_id': 'local_order_id',
+                            'type': 'payment',
+                            'amount': 100,
+                            'currency': 'EUR',
+                            'description': 'description_of_order',
+                            'return_url': 'https://www.example.com',
+                            'transactions': [{
+                                              'payment_method': 'ideal',
+                                              'payment_method_details': {'issuer_id': 'ideal_issuer_id'}
+                                              }]
+                            })
+
+# get transactions from API
+transactions = order.transactions.all()
+transaction = transactions[0]
+
+# redirect to payment_url
+my_redirect(transaction.payment_url)
+```
+
+**Get Balance**
+```python
+# initialise the API
+gapi = GingerAPI('<API_KEY>')
+
+# get own merchant
+merchant = gapi.merchants.get('merchant_id')
+projects = merchant.projects.all()
+project = projects[0]
+
+# get balance (available = incoming - (outgoing + fees + fees_vat + reserved))
+balance = merchant.balances.all()
+print balance.incoming
+print balance.outgoing
+print balance.fees
+print balance.fees_vat
+print balance.reserved
+print balance.available
+```
+
+**Get all orders**
+```python
+# initialise the API
+gapi = GingerAPI('<API_KEY>')
+
+# get own merchant
+merchant = gapi.merchants.get(client.gapi_merchant_id)
+
+#get all orders
+orders = gapi.orders.all()
+for order in orders:
+	print order.id
+	print order.merchant_order_id
+	print order.status
+	print order.description
+	print order.amount
+	print order.modified
+```
+
+API Documentation
+
+Licence
+----
+This software is under the [MIT License (MIT)](http://opensource.org/licenses/MIT) and is Copyright (c) 2014 Congressus, The Netherlands
